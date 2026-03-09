@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// App-wide color palette — soft, light, premium feel
+/// App-wide color palette — fresh, light blue, premium feel
 class AppColors {
-  // Primary palette — soft lavender / violet
-  static const Color primary = Color(0xFF7C5CFC);
-  static const Color primaryLight = Color(0xFFB8A9FF);
-  static const Color primarySoft = Color(0xFFEDE8FF);
+  // Primary palette — sky blue
+  static const Color primary = Color(0xFF42A5F5);
+  static const Color primaryLight = Color(0xFF90CAF9);
+  static const Color primarySoft = Color(0xFFE3F2FD);
 
-  // Accent — warm peach
+  // Accent — warm coral
   static const Color accent = Color(0xFFFF8A80);
   static const Color accentSoft = Color(0xFFFFE0DB);
 
@@ -16,35 +16,35 @@ class AppColors {
   static const Color mintSoft = Color(0xFFDFF7ED);
 
   // Backgrounds
-  static const Color background = Color(0xFFF8F7FC);
+  static const Color background = Color(0xFFF5F9FE);
   static const Color cardBg = Colors.white;
-  static const Color surfaceLight = Color(0xFFF2F0FA);
+  static const Color surfaceLight = Color(0xFFEAF2FB);
 
   // Text
-  static const Color textDark = Color(0xFF2D2B3A);
-  static const Color textMedium = Color(0xFF6E6B7B);
-  static const Color textLight = Color(0xFFA8A5B3);
+  static const Color textDark = Color(0xFF1E3A5F);
+  static const Color textMedium = Color(0xFF5A7894);
+  static const Color textLight = Color(0xFF9DB5CC);
 
   // Utility
-  static const Color divider = Color(0xFFEEECF5);
+  static const Color divider = Color(0xFFDFEAF5);
   static const Color error = Color(0xFFFF5252);
-  static const Color shadow = Color(0x187C5CFC);
+  static const Color shadow = Color(0x1842A5F5);
 
   // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF7C5CFC), Color(0xFFA78BFA)],
+    colors: [Color(0xFF42A5F5), Color(0xFF64B5F6)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient softGradient = LinearGradient(
-    colors: [Color(0xFFEDE8FF), Color(0xFFF8F7FC)],
+    colors: [Color(0xFFE3F2FD), Color(0xFFF5F9FE)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
 
   static const LinearGradient splashGradient = LinearGradient(
-    colors: [Color(0xFF7C5CFC), Color(0xFFA78BFA), Color(0xFFD4BBFF)],
+    colors: [Color(0xFF1E88E5), Color(0xFF42A5F5), Color(0xFF90CAF9)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

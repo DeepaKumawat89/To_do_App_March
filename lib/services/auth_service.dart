@@ -1,9 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   final Logger _logger = Logger();
+
+  bool _googleSignInInitialized = false;
 
   // Stream for auth state changes
   Stream<User?> get userStream => _auth.authStateChanges();
@@ -43,9 +47,46 @@ class AuthService {
     }
   }
 
+  // Google Sign In
+  Future<UserCredential?> signInWithGoogle() async {
+    try {
+      if (!_googleSignInInitialized) {
+        await _googleSignIn.initialize(
+          serverClientId:
+              '1045860641831-9k28neonaqolgbuj8iideaoi520jorgn.apps.googleusercontent.com',
+        );
+        _googleSignInInitialized = true;
+      }
+
+      // Trigger the authentication flow (throws if canceled)
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+      // Obtain the authentication details
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a Firebase credential using only the ID token
+      // (Google Sign In v7 separates authentication from authorization,
+      // so we use the idToken for Firebase authentication)
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: null,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await _auth.signInWithCredential(credential);
+    } catch (e) {
+      _logger.e("Google SignIn Error: $e");
+      rethrow;
+    }
+  }
+
   // Logout
   Future<void> logout() async {
     try {
+      if (_googleSignInInitialized) {
+        await _googleSignIn.signOut();
+      }
       await _auth.signOut();
     } catch (e) {
       _logger.e("Logout Error: $e");

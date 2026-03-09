@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
 
 enum AuthStatus { authenticated, unauthenticated, authenticating, loading }
@@ -20,12 +21,20 @@ class AuthProvider with ChangeNotifier {
     _authService.userStream.listen(_onAuthStateChanged);
   }
 
+  Future<bool> checkSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
   Future<void> _onAuthStateChanged(User? user) async {
+    final prefs = await SharedPreferences.getInstance();
     if (user == null) {
       _status = AuthStatus.unauthenticated;
+      await prefs.setBool('isLoggedIn', false);
     } else {
       _user = user;
       _status = AuthStatus.authenticated;
+      await prefs.setBool('isLoggedIn', true);
     }
     notifyListeners();
   }
@@ -53,6 +62,30 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
 
       await _authService.login(email, password);
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _status = AuthStatus.unauthenticated;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> loginWithGoogle() async {
+    try {
+      _status = AuthStatus.authenticating;
+      _error = null;
+      notifyListeners();
+
+      final userCred = await _authService.signInWithGoogle();
+
+      // If userCred is null, the user cancelled the flow.
+      if (userCred == null) {
+        _status = AuthStatus.unauthenticated;
+        notifyListeners();
+        return false;
+      }
+
       return true;
     } catch (e) {
       _error = e.toString();

@@ -44,139 +44,203 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: size.height * 0.06),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: size.height * 0.06),
 
-                // Illustration / Header area
-                Center(
-                  child: Container(
-                    width: 90,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
+                    // Illustration / Header area
+                    Center(
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryGradient,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.check_circle_rounded,
+                          size: 48,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Welcome text
+                    const Center(
+                      child: Text(
+                        "Welcome Back!",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDark,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Center(
+                      child: Text(
+                        "Sign in to continue managing your tasks",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textLight,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+
+                    // Email field
+                    CustomTextField(
+                      controller: _emailController,
+                      label: "Email address",
+                      icon: Icons.email_outlined,
+                      validator: (v) => v!.isEmpty ? "Enter your email" : null,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Password field
+                    CustomTextField(
+                      controller: _passwordController,
+                      label: "Password",
+                      icon: Icons.lock_outline_rounded,
+                      isPassword: true,
+                      validator: (v) => v!.length < 6
+                          ? "Password must be at least 6 characters"
+                          : null,
+                    ),
+                    const SizedBox(height: 28),
+
+                    // Login button
+                    CustomButton(
+                      text: "Sign In",
+                      isLoading:
+                          authProvider.status == AuthStatus.authenticating,
+                      onPressed: _login,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Divider
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.divider,
+                            thickness: 1,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            "OR",
+                            style: TextStyle(
+                              color: AppColors.textLight,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.divider,
+                            thickness: 1,
+                          ),
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.check_circle_rounded,
-                      size: 48,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
+                    const SizedBox(height: 24),
 
-                // Welcome text
-                const Center(
-                  child: Text(
-                    "Welcome Back!",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.textDark,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Center(
-                  child: Text(
-                    "Sign in to continue managing your tasks",
-                    style: TextStyle(fontSize: 14, color: AppColors.textLight),
-                  ),
-                ),
-                const SizedBox(height: 40),
-
-                // Email field
-                CustomTextField(
-                  controller: _emailController,
-                  label: "Email address",
-                  icon: Icons.email_outlined,
-                  validator: (v) => v!.isEmpty ? "Enter your email" : null,
-                ),
-                const SizedBox(height: 16),
-
-                // Password field
-                CustomTextField(
-                  controller: _passwordController,
-                  label: "Password",
-                  icon: Icons.lock_outline_rounded,
-                  isPassword: true,
-                  validator: (v) => v!.length < 6
-                      ? "Password must be at least 6 characters"
-                      : null,
-                ),
-                const SizedBox(height: 28),
-
-                // Login button
-                CustomButton(
-                  text: "Sign In",
-                  isLoading: authProvider.status == AuthStatus.authenticating,
-                  onPressed: _login,
-                ),
-                const SizedBox(height: 24),
-
-                // Divider
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(color: AppColors.divider, thickness: 1),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "OR",
-                        style: TextStyle(
-                          color: AppColors.textLight,
-                          fontSize: 12,
+                    // Google Sign In button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: AppColors.textDark,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            side: BorderSide(
+                              color: AppColors.divider,
+                              width: 1.5,
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          final authProvider = Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          );
+                          final success = await authProvider.loginWithGoogle();
+                          if (success && mounted) {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          } else if (mounted && authProvider.error != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(authProvider.error!),
+                                backgroundColor: AppColors.error,
+                              ),
+                            );
+                          }
+                        },
+                        icon: Image.network(
+                          'https://img.icons8.com/color/48/000000/google-logo.png',
+                          height: 24,
+                        ),
+                        label: const Text(
+                          "Sign in with Google",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Divider(color: AppColors.divider, thickness: 1),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                // Sign up link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Don't have an account? ",
-                      style: TextStyle(
-                        color: AppColors.textMedium,
-                        fontSize: 14,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/signup'),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
+                    // Sign up link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account? ",
+                          style: TextStyle(
+                            color: AppColors.textMedium,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/signup'),
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
         ),

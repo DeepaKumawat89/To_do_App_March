@@ -32,7 +32,11 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(seconds: 4));
     if (!mounted) return;
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    if (auth.isAuthenticated) {
+
+    // Check our new shared preference session directly!
+    final hasSession = await auth.checkSession();
+
+    if (hasSession || auth.isAuthenticated) {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       Navigator.pushReplacementNamed(context, '/login');

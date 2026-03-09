@@ -46,48 +46,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            // Header section
-            _buildHeader(
-              authProvider,
-              taskProvider.tasks.length,
-              completed,
-              pending,
-            ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 600),
+            child: Column(
+              children: [
+                // Header section
+                _buildHeader(
+                  authProvider,
+                  taskProvider.tasks.length,
+                  completed,
+                  pending,
+                ),
 
-            // Task list
-            Expanded(
-              child: taskProvider.isLoading && taskProvider.tasks.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
-                    )
-                  : RefreshIndicator(
-                      color: AppColors.primary,
-                      onRefresh: _loadTasks,
-                      child: taskProvider.tasks.isEmpty
-                          ? _buildEmptyState()
-                          : ListView.builder(
-                              padding: const EdgeInsets.only(
-                                top: 8,
-                                bottom: 100,
-                              ),
-                              itemCount: taskProvider.tasks.length,
-                              itemBuilder: (context, index) {
-                                final task = taskProvider.tasks[index];
-                                return _buildTaskCard(
-                                  task,
-                                  taskProvider,
-                                  authProvider,
-                                  index,
-                                );
-                              },
-                            ),
-                    ),
+                // Task list
+                Expanded(
+                  child: taskProvider.isLoading && taskProvider.tasks.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        )
+                      : RefreshIndicator(
+                          color: AppColors.primary,
+                          onRefresh: _loadTasks,
+                          child: taskProvider.tasks.isEmpty
+                              ? _buildEmptyState()
+                              : ListView.builder(
+                                  padding: const EdgeInsets.only(
+                                    top: 8,
+                                    bottom: 100,
+                                  ),
+                                  itemCount: taskProvider.tasks.length,
+                                  itemBuilder: (context, index) {
+                                    final task = taskProvider.tasks[index];
+                                    return _buildTaskCard(
+                                      task,
+                                      taskProvider,
+                                      authProvider,
+                                      index,
+                                    );
+                                  },
+                                ),
+                        ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
