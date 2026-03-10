@@ -80,7 +80,7 @@ To generate a production-ready APK:
 ```bash
 flutter build apk --release
 ```
-The APK will be located at: `build/app/outputs/flutter-apk/app-release.apk`
+The latest APK is saved at: `release/task_flow_release.apk`
 
 ---
 
