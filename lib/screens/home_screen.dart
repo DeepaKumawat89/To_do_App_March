@@ -1,5 +1,7 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 import '../providers/auth_provider.dart';
 import '../providers/task_provider.dart';
 import '../models/task_model.dart';
@@ -16,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  bool _showAllTasks = false;
 
   @override
   void initState() {
@@ -42,16 +45,47 @@ class _HomeScreenState extends State<HomeScreen> {
     final taskProvider = Provider.of<TaskProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context);
 
-    // Count completed & pending
-    final completed = taskProvider.tasks.where((t) => t.isCompleted).length;
-    final pending = taskProvider.tasks.length - completed;
+    final today = DateTime.now();
+
+    // Total stats for profile:
+    final overallCompleted = taskProvider.tasks
+        .where((t) => t.isCompleted)
+        .length;
+
+    // Tasks list filtering
+    var displayedTasks = taskProvider.tasks;
+    if (!_showAllTasks) {
+      displayedTasks = displayedTasks
+          .where(
+            (t) =>
+                t.dueDate.year == today.year &&
+                t.dueDate.month == today.month &&
+                t.dueDate.day == today.day,
+          )
+          .toList();
+    }
+
+    // Sort tasks by date
+    displayedTasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+
+    // today's pending
+    int todayPending = taskProvider.tasks
+        .where(
+          (t) =>
+              t.dueDate.year == today.year &&
+              t.dueDate.month == today.month &&
+              t.dueDate.day == today.day &&
+              !t.isCompleted,
+        )
+        .length;
 
     return Scaffold(
+      extendBody: true,
       backgroundColor: const Color(0xFFF7F8FA),
-      body: _currentIndex == 3
+      body: _currentIndex == 1
           ? ProfileScreen(
               onLogout: _logout,
-              completedTasks: completed,
+              completedTasks: overallCompleted,
               totalTasks: taskProvider.tasks.length,
             )
           : SafeArea(
@@ -61,12 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       // Header section
-                      _buildHeader(
-                        authProvider,
-                        taskProvider.tasks.length,
-                        completed,
-                        pending,
-                      ),
+                      _buildHeader(authProvider, todayPending),
 
                       // Task list
                       Expanded(
@@ -80,17 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             : RefreshIndicator(
                                 color: AppColors.primary,
                                 onRefresh: _loadTasks,
-                                child: taskProvider.tasks.isEmpty
+                                child: displayedTasks.isEmpty
                                     ? _buildEmptyState()
                                     : ListView.builder(
                                         padding: const EdgeInsets.only(
                                           top: 8,
                                           bottom: 100,
                                         ),
-                                        itemCount: taskProvider.tasks.length,
+                                        itemCount: displayedTasks.length,
                                         itemBuilder: (context, index) {
-                                          final task =
-                                              taskProvider.tasks[index];
+                                          final task = displayedTasks[index];
                                           return _buildTaskCard(
                                             task,
                                             taskProvider,
@@ -106,19 +134,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-      floatingActionButton: _currentIndex == 3
+      floatingActionButton: _currentIndex == 1
           ? null
           : Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF3D3CFA).withOpacity(0.4),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(30),
-              ),
+              margin: const EdgeInsets.only(bottom: 20),
               child: FloatingActionButton(
                 onPressed: () {
                   showModalBottomSheet(
@@ -129,10 +148,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
                 elevation: 0,
+                focusElevation: 0,
+                hoverElevation: 0,
+                highlightElevation: 0,
                 backgroundColor: const Color(0xFF3D3CFA),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
+                shape: const CircleBorder(),
                 child: const Icon(
                   Icons.add_rounded,
                   size: 32,
@@ -140,68 +160,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF3D3CFA),
-        unselectedItemColor: const Color(0xFF98A2B3),
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.5,
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF3D3CFA).withOpacity(0.08),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          child: WaterDropNavBar(
+            backgroundColor: Colors.white,
+            waterDropColor: const Color(0xFF3D3CFA),
+            inactiveIconColor: const Color(0xFF98A2B3),
+            iconSize: 32,
+            bottomPadding: 16,
+            onItemSelected: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            selectedIndex: _currentIndex,
+            barItems: [
+              BarItem(
+                filledIcon: Icons.home_rounded,
+                outlinedIcon: Icons.home_outlined,
+              ),
+              BarItem(
+                filledIcon: Icons.person_rounded,
+                outlinedIcon: Icons.person_outline_rounded,
+              ),
+            ],
+          ),
         ),
-        elevation: 10,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 6),
-              child: Icon(Icons.home_filled, size: 26),
-            ),
-            label: 'HOME',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 6),
-              child: Icon(Icons.check_circle_outline_rounded, size: 26),
-            ),
-            label: 'TASKS',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 6),
-              child: Icon(Icons.calendar_today_outlined, size: 24),
-            ),
-            label: 'SCHEDULE',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.only(bottom: 6),
-              child: Icon(Icons.person_outline_rounded, size: 28),
-            ),
-            label: 'PROFILE',
-          ),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
       ),
     );
   }
 
-  Widget _buildHeader(
-    AuthProvider authProvider,
-    int total,
-    int completed,
-    int pending,
-  ) {
+  Widget _buildHeader(AuthProvider authProvider, int pending) {
     final email = authProvider.user?.email ?? "User";
     final name = email.split('@').first;
     final displayName = "${name[0].toUpperCase()}${name.substring(1)}";
@@ -281,19 +280,23 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Today's Tasks",
-                style: TextStyle(
+              Text(
+                _showAllTasks ? "All Tasks" : "Today's Tasks",
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF101928),
                 ),
               ),
               GestureDetector(
-                onTap: () {},
-                child: const Text(
-                  "View all",
-                  style: TextStyle(
+                onTap: () {
+                  setState(() {
+                    _showAllTasks = !_showAllTasks;
+                  });
+                },
+                child: Text(
+                  _showAllTasks ? "View Today" : "View all",
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF3D3CFA),
@@ -360,24 +363,20 @@ class _HomeScreenState extends State<HomeScreen> {
     AuthProvider authProvider,
     int index,
   ) {
-    // Determine priority styling based on index for the UI matched mockup
-    int tagIndex = index % 3;
     Color pillBg;
     Color pillText;
-    String pillLabel;
+    String pillLabel = task.priority.toUpperCase();
 
-    if (tagIndex == 0) {
+    if (task.priority == "High") {
       pillBg = const Color(0xFFFEEFC3); // Soft Amber for high priority
       pillText = const Color(0xFFB45309);
-      pillLabel = "URGENT";
-    } else if (tagIndex == 1) {
+    } else if (task.priority == "Med") {
       pillBg = const Color(0xFFE5F0FF);
       pillText = const Color(0xFF1E6CFF);
       pillLabel = "MEDIUM";
     } else {
       pillBg = const Color(0xFFF2F4F7);
       pillText = const Color(0xFF667085);
-      pillLabel = "LOW";
     }
 
     return Dismissible(
@@ -432,14 +431,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (_) => AddEditTaskScreen(task: task),
-              );
-            },
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -499,33 +490,127 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: pillBg,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            pillLabel,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: pillText,
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: pillBg,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                pillLabel,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: pillText,
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "${task.dueDate.day.toString().padLeft(2, '0')}/${task.dueDate.month.toString().padLeft(2, '0')}/${task.dueDate.year}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF98A2B3),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
 
-                  // 3 Dots
-                  const Icon(
-                    Icons.more_vert_rounded,
-                    color: Color(0xFF98A2B3),
-                    size: 24,
+                  // Options Menu
+                  PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Color(0xFF98A2B3),
+                      size: 24,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    color: Colors.white,
+                    elevation: 4,
+                    onSelected: (value) {
+                      if (value == 'edit') {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) => AddEditTaskScreen(task: task),
+                        );
+                      } else if (value == 'delete') {
+                        taskProvider.deleteTask(
+                          authProvider.user!.uid,
+                          task.id!,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text("Task deleted"),
+                            action: SnackBarAction(
+                              label: "UNDO",
+                              textColor: Colors.white,
+                              onPressed: () {
+                                taskProvider.addTask(
+                                  authProvider.user!.uid,
+                                  task,
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.edit_outlined,
+                              size: 20,
+                              color: Color(0xFF344054),
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              "Edit",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF344054),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete_outline_rounded,
+                              size: 20,
+                              color: Colors.redAccent,
+                            ),
+                            SizedBox(width: 12),
+                            Text(
+                              "Delete",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

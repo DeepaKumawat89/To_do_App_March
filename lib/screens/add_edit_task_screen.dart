@@ -18,6 +18,8 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   final _formKey = GlobalKey<FormState>();
+  String _selectedPriority = "Low";
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -26,6 +28,8 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
     _descriptionController = TextEditingController(
       text: widget.task?.description ?? "",
     );
+    _selectedPriority = widget.task?.priority ?? "Low";
+    _selectedDate = widget.task?.dueDate ?? DateTime.now();
   }
 
   void _saveTask() async {
@@ -40,6 +44,8 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
           title: _titleController.text.trim(),
           description: _descriptionController.text.trim(),
           createdAt: DateTime.now(),
+          priority: _selectedPriority,
+          dueDate: _selectedDate,
         );
         await taskProvider.addTask(userId, newTask);
       } else {
@@ -47,6 +53,8 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
         final updatedTask = widget.task!.copyWith(
           title: _titleController.text.trim(),
           description: _descriptionController.text.trim(),
+          priority: _selectedPriority,
+          dueDate: _selectedDate,
         );
         await taskProvider.updateTask(userId, updatedTask);
       }
@@ -248,40 +256,116 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                           ),
                           child: Row(
                             children: [
-                              Expanded(child: _buildPriorityTab("Low", true)),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      setState(() => _selectedPriority = "Low"),
+                                  child: _buildPriorityTab(
+                                    "Low",
+                                    _selectedPriority == "Low",
+                                  ),
+                                ),
+                              ),
                               Container(
                                 width: 1,
                                 color: const Color(0xFFE4E7EC),
                               ),
-                              Expanded(child: _buildPriorityTab("Med", false)),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      setState(() => _selectedPriority = "Med"),
+                                  child: _buildPriorityTab(
+                                    "Med",
+                                    _selectedPriority == "Med",
+                                  ),
+                                ),
+                              ),
                               Container(
                                 width: 1,
                                 color: const Color(0xFFE4E7EC),
                               ),
-                              Expanded(child: _buildPriorityTab("High", false)),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => setState(
+                                    () => _selectedPriority = "High",
+                                  ),
+                                  child: _buildPriorityTab(
+                                    "High",
+                                    _selectedPriority == "High",
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 24),
 
-                        // Category (Visual mockup only for now)
+                        // Due Date
                         const Text(
-                          "Category",
+                          "Due Date",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF344054),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            _buildCategoryChip("Design", true),
-                            _buildCategoryChip("Development", false),
-                            _buildCategoryChip("Marketing", false),
-                          ],
+                        const SizedBox(height: 8),
+                        GestureDetector(
+                          onTap: () async {
+                            final pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: _selectedDate,
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              builder: (context, child) {
+                                return Theme(
+                                  data: Theme.of(context).copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: Color(0xFF3D3CFA),
+                                      onPrimary: Colors.white,
+                                      onSurface: Colors.black,
+                                    ),
+                                  ),
+                                  child: child!,
+                                );
+                              },
+                            );
+                            if (pickedDate != null &&
+                                pickedDate != _selectedDate) {
+                              setState(() {
+                                _selectedDate = pickedDate;
+                              });
+                            }
+                          },
+                          child: Container(
+                            height: 52,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: const Color(0xFFE4E7EC),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF101928),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.calendar_today_rounded,
+                                  color: Color(0xFF667085),
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         const SizedBox(
                           height: 48,
@@ -378,27 +462,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
           fontSize: 14,
           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           color: isSelected ? const Color(0xFF3D3CFA) : const Color(0xFF667085),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategoryChip(String label, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFE5E5FF) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? const Color(0xFFB1B1FF) : const Color(0xFFE4E7EC),
-        ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          color: isSelected ? const Color(0xFF3D3CFA) : const Color(0xFF475467),
         ),
       ),
     );

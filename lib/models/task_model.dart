@@ -6,6 +6,8 @@ class Task {
   final String description;
   final bool isCompleted;
   final DateTime createdAt;
+  final String priority;
+  final DateTime dueDate;
 
   Task({
     this.id,
@@ -13,6 +15,8 @@ class Task {
     required this.description,
     this.isCompleted = false,
     required this.createdAt,
+    this.priority = "Low",
+    required this.dueDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,19 +24,29 @@ class Task {
       'title': title,
       'description': description,
       'isCompleted': isCompleted,
-      'createdAt':
-          createdAt, // Firestore handles DateTime/Timestamp automatically
+      'createdAt': createdAt,
+      'priority': priority,
+      'dueDate': dueDate,
     };
   }
 
   factory Task.fromMap(String id, Map<String, dynamic> map) {
-    DateTime date;
+    DateTime createdAtDate;
     if (map['createdAt'] is Timestamp) {
-      date = (map['createdAt'] as Timestamp).toDate();
+      createdAtDate = (map['createdAt'] as Timestamp).toDate();
     } else if (map['createdAt'] is String) {
-      date = DateTime.parse(map['createdAt']);
+      createdAtDate = DateTime.parse(map['createdAt']);
     } else {
-      date = DateTime.now();
+      createdAtDate = DateTime.now();
+    }
+
+    DateTime dueDateDate;
+    if (map['dueDate'] is Timestamp) {
+      dueDateDate = (map['dueDate'] as Timestamp).toDate();
+    } else if (map['dueDate'] is String) {
+      dueDateDate = DateTime.parse(map['dueDate']);
+    } else {
+      dueDateDate = DateTime.now();
     }
 
     return Task(
@@ -40,7 +54,9 @@ class Task {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       isCompleted: map['isCompleted'] ?? false,
-      createdAt: date,
+      createdAt: createdAtDate,
+      priority: map['priority'] ?? 'Low',
+      dueDate: dueDateDate,
     );
   }
 
@@ -50,6 +66,8 @@ class Task {
     String? description,
     bool? isCompleted,
     DateTime? createdAt,
+    String? priority,
+    DateTime? dueDate,
   }) {
     return Task(
       id: id ?? this.id,
@@ -57,6 +75,8 @@ class Task {
       description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
       createdAt: createdAt ?? this.createdAt,
+      priority: priority ?? this.priority,
+      dueDate: dueDate ?? this.dueDate,
     );
   }
 }
