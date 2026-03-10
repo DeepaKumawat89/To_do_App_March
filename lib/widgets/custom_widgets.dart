@@ -158,3 +158,65 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
+
+/// Google Sign In Button
+class GoogleSignInButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool isLoading;
+
+  const GoogleSignInButton({
+    super.key,
+    required this.onPressed,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: OutlinedButton(
+        onPressed: isLoading ? null : onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.white,
+          side: BorderSide(
+            color: AppColors.divider.withOpacity(0.5),
+            width: 1.5,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isLoading)
+              const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              )
+            else
+              Image.network(
+                'https://img.icons8.com/color/48/000000/google-logo.png',
+                height: 24,
+              ),
+            const SizedBox(width: 12),
+            const Text(
+              "Continue with Google",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textDark,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

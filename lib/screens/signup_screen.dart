@@ -37,13 +37,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (success && mounted) {
         Navigator.pushReplacementNamed(context, '/home');
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(authProvider.error ?? "Signup failed"),
-            backgroundColor: AppColors.error,
-          ),
-        );
       }
     }
   }
@@ -51,13 +44,15 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 500),
-            child: SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Form(
                 key: _formKey,
@@ -82,34 +77,63 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: size.height * 0.02),
+
+                    // Illustration / Header area
+                    Center(
+                      child: Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          gradient: AppColors.primaryGradient,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withOpacity(0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.person_add_rounded,
+                          size: 48,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
 
                     // Header
-                    const Text(
-                      "Create Account",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textDark,
-                        letterSpacing: 0.3,
+                    const Center(
+                      child: Text(
+                        "Create Account",
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textDark,
+                          letterSpacing: 0.3,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      "Join us and start organizing your life",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textLight,
+                    const Center(
+                      child: Text(
+                        "Join us and start organizing your life",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textLight,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 24),
 
                     // Email
                     CustomTextField(
                       controller: _emailController,
                       label: "Email address",
                       icon: Icons.email_outlined,
-                      validator: (v) => v!.isEmpty ? "Enter your email" : null,
+                      validator: null,
                     ),
                     const SizedBox(height: 16),
 
@@ -119,9 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       label: "Password",
                       icon: Icons.lock_outline_rounded,
                       isPassword: true,
-                      validator: (v) => v!.length < 6
-                          ? "Password must be at least 6 characters"
-                          : null,
+                      validator: null,
                     ),
                     const SizedBox(height: 16),
 
@@ -131,19 +153,64 @@ class _SignupScreenState extends State<SignupScreen> {
                       label: "Confirm Password",
                       icon: Icons.lock_reset_rounded,
                       isPassword: true,
-                      validator: (v) =>
-                          v!.isEmpty ? "Confirm your password" : null,
+                      validator: null,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 24),
 
                     // Signup button
                     CustomButton(
                       text: "Create Account",
                       isLoading:
+                          !authProvider.isGoogleLoading &&
                           authProvider.status == AuthStatus.authenticating,
                       onPressed: _signup,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
+
+                    // Divider
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.divider,
+                            thickness: 1,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            "OR",
+                            style: TextStyle(
+                              color: AppColors.textLight,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: AppColors.divider,
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Google Sign In button
+                    GoogleSignInButton(
+                      isLoading: authProvider.isGoogleLoading,
+                      onPressed: () async {
+                        final authProv = Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        );
+                        final success = await authProv.loginWithGoogle();
+                        if (success && mounted) {
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
 
                     // Login link
                     Row(

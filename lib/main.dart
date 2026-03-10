@@ -31,6 +31,39 @@ void main() async {
     debugPrint("Firebase initialization failed: $e");
   }
 
+  // Custom error widget that replaces the Flutter "Red Screen of Death"
+  // with a clean, branded error screen.
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      color: AppColors.background,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.sync_rounded,
+                color: AppColors.textMedium,
+                size: 48,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Updating...",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textDark,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
+
   runApp(
     MultiProvider(
       providers: [

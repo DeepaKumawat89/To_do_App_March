@@ -26,13 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (success && mounted) {
         Navigator.pushReplacementNamed(context, '/home');
-      } else if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(authProvider.error ?? "Login failed"),
-            backgroundColor: AppColors.error,
-          ),
-        );
       }
     }
   }
@@ -110,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       label: "Email address",
                       icon: Icons.email_outlined,
-                      validator: (v) => v!.isEmpty ? "Enter your email" : null,
+                      validator: null,
                     ),
                     const SizedBox(height: 16),
 
@@ -120,9 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: "Password",
                       icon: Icons.lock_outline_rounded,
                       isPassword: true,
-                      validator: (v) => v!.length < 6
-                          ? "Password must be at least 6 characters"
-                          : null,
+                      validator: null,
                     ),
                     const SizedBox(height: 28),
 
@@ -130,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomButton(
                       text: "Sign In",
                       isLoading:
+                          !authProvider.isGoogleLoading &&
                           authProvider.status == AuthStatus.authenticating,
                       onPressed: _login,
                     ),
@@ -165,51 +157,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 24),
 
                     // Google Sign In button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: AppColors.textDark,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            side: BorderSide(
-                              color: AppColors.divider,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          final authProvider = Provider.of<AuthProvider>(
-                            context,
-                            listen: false,
-                          );
-                          final success = await authProvider.loginWithGoogle();
-                          if (success && mounted) {
-                            Navigator.pushReplacementNamed(context, '/home');
-                          } else if (mounted && authProvider.error != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(authProvider.error!),
-                                backgroundColor: AppColors.error,
-                              ),
-                            );
-                          }
-                        },
-                        icon: Image.network(
-                          'https://img.icons8.com/color/48/000000/google-logo.png',
-                          height: 24,
-                        ),
-                        label: const Text(
-                          "Sign in with Google",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                    GoogleSignInButton(
+                      isLoading: authProvider.isGoogleLoading,
+                      onPressed: () async {
+                        final authProvider = Provider.of<AuthProvider>(
+                          context,
+                          listen: false,
+                        );
+                        final success = await authProvider.loginWithGoogle();
+                        if (success && mounted) {
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      },
                     ),
                     const SizedBox(height: 24),
 

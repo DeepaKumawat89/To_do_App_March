@@ -11,11 +11,13 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   AuthStatus _status = AuthStatus.loading;
   String? _error;
+  bool _isGoogleLoading = false;
 
   User? get user => _user;
   AuthStatus get status => _status;
   String? get error => _error;
   bool get isAuthenticated => _status == AuthStatus.authenticated;
+  bool get isGoogleLoading => _isGoogleLoading;
 
   AuthProvider() {
     _authService.userStream.listen(_onAuthStateChanged);
@@ -73,6 +75,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> loginWithGoogle() async {
     try {
+      _isGoogleLoading = true;
       _status = AuthStatus.authenticating;
       _error = null;
       notifyListeners();
@@ -81,13 +84,16 @@ class AuthProvider with ChangeNotifier {
 
       // If userCred is null, the user cancelled the flow.
       if (userCred == null) {
+        _isGoogleLoading = false;
         _status = AuthStatus.unauthenticated;
         notifyListeners();
         return false;
       }
 
+      _isGoogleLoading = false;
       return true;
     } catch (e) {
+      _isGoogleLoading = false;
       _error = e.toString();
       _status = AuthStatus.unauthenticated;
       notifyListeners();

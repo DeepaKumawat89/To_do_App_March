@@ -27,7 +27,7 @@ class AppColors {
 
   // Utility
   static const Color divider = Color(0xFFDFEAF5);
-  static const Color error = Color(0xFFFF5252);
+  static const Color error = Color(0xFFFF9100); // Amber/Orange instead of Red
   static const Color shadow = Color(0x1842A5F5);
 
   // Gradients
@@ -110,8 +110,9 @@ class AppTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: BorderSide.none,
         ),
+        errorStyle: const TextStyle(fontSize: 0, height: 0),
         labelStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
         hintStyle: const TextStyle(color: AppColors.textLight, fontSize: 14),
       ),
