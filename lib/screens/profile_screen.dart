@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-// Task provider unused import removed
+import '../providers/theme_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -25,6 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
     final email = authProvider.user?.email ?? "User";
     final name = email.split('@').first;
     final displayName = "${name[0].toUpperCase()}${name.substring(1)}";
@@ -35,26 +38,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : (completedTasks / totalTasks);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F8FA),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF101928)),
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           onPressed: () {}, // Handled by bottom nav tap if we want to go back
         ),
-        title: const Text(
+        title: Text(
           "Profile",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF101928),
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_rounded, color: Color(0xFF101928)),
+            icon: Icon(
+              Icons.settings_rounded,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             onPressed: () {},
           ),
         ],
@@ -91,13 +100,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         color: const Color(0xFF3D3CFA),
                                         width: 3,
                                       ),
-                                      color: const Color(0xFFE4E7EC),
+                                      color: isDarkMode
+                                          ? const Color(0xFF2C2C2C)
+                                          : const Color(0xFFE4E7EC),
                                     ),
-                                    child: const Center(
+                                    child: Center(
                                       child: Icon(
                                         Icons.person_rounded,
                                         size: 50,
-                                        color: Color(0xFF98A2B3),
+                                        color: isDarkMode
+                                            ? Colors.white70
+                                            : const Color(0xFF98A2B3),
                                       ),
                                     ),
                                   ),
@@ -129,10 +142,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(height: 24),
                               Text(
                                 displayName,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w800,
-                                  color: Color(0xFF101928),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                             ],
@@ -144,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: const [
                               BoxShadow(
@@ -157,12 +172,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 "Performance Summary",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w800,
-                                  color: Color(0xFF101928),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -178,9 +195,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         CircularProgressIndicator(
                                           value: completionPercentage,
                                           strokeWidth: 10,
-                                          backgroundColor: const Color(
-                                            0xFFE5E5FF,
-                                          ),
+                                          backgroundColor: isDarkMode
+                                              ? const Color(0xFF2C2C2C)
+                                              : const Color(0xFFE5E5FF),
                                           valueColor:
                                               const AlwaysStoppedAnimation<
                                                 Color
@@ -193,10 +210,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             children: [
                                               Text(
                                                 "${(completionPercentage * 100).toInt()}%",
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 22,
                                                   fontWeight: FontWeight.w800,
-                                                  color: Color(0xFF101928),
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.onSurface,
                                                 ),
                                               ),
                                               const Text(
@@ -220,54 +239,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Text(
                                           "Tasks Completed",
                                           style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xFF667085),
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        const SizedBox(height: 8),
                                         Text(
                                           "$completedTasks / $totalTasks",
                                           style: const TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 28,
                                             fontWeight: FontWeight.w800,
                                             color: Color(0xFF3D3CFA),
                                           ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Container(
-                                          height: 1,
-                                          color: const Color(0xFFEAECF0),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        const Text(
-                                          "Weekly Streak",
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF667085),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        const Row(
-                                          children: [
-                                            Text(
-                                              "12 Days ",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w800,
-                                                color: Color(0xFF101928),
-                                              ),
-                                            ),
-                                            Text(
-                                              "🔥",
-                                              style: TextStyle(fontSize: 16),
-                                            ),
-                                          ],
                                         ),
                                       ],
                                     ),
@@ -280,21 +270,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const Spacer(flex: 2),
 
                         // App Settings
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             "App Settings",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
-                              color: Color(0xFF101928),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ),
                         const SizedBox(height: 16),
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: const [
                               BoxShadow(
@@ -307,6 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             children: [
                               _buildListTile(
+                                context: context,
                                 icon: Icons.notifications_rounded,
                                 title: "Notifications",
                                 trailing: Switch(
@@ -320,29 +311,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   activeTrackColor: const Color(0xFF3D3CFA),
                                 ),
                               ),
-                              const Divider(
-                                color: Color(0xFFEAECF0),
+                              Divider(
+                                color: isDarkMode
+                                    ? Colors.white12
+                                    : const Color(0xFFEAECF0),
                                 height: 1,
                                 indent: 16,
                                 endIndent: 16,
                               ),
                               _buildListTile(
+                                context: context,
                                 icon: Icons.dark_mode_rounded,
                                 title: "Dark Mode",
                                 trailing: Switch(
-                                  value: false,
-                                  onChanged: (v) {},
+                                  value: isDarkMode,
+                                  onChanged: (v) {
+                                    themeProvider.toggleTheme();
+                                  },
+                                  activeColor: Colors.white,
+                                  activeTrackColor: const Color(0xFF3D3CFA),
                                   inactiveThumbColor: Colors.white,
                                   inactiveTrackColor: const Color(0xFFD0D5DD),
                                 ),
                               ),
-                              const Divider(
-                                color: Color(0xFFEAECF0),
+                              Divider(
+                                color: isDarkMode
+                                    ? Colors.white12
+                                    : const Color(0xFFEAECF0),
                                 height: 1,
                                 indent: 16,
                                 endIndent: 16,
                               ),
                               _buildListTile(
+                                context: context,
                                 icon: Icons.logout_rounded,
                                 iconColor: const Color(0xFFE93544),
                                 title: "Sign Out",
@@ -370,6 +371,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildListTile({
+    required BuildContext context,
     required IconData icon,
     required String title,
     Color? iconColor,
@@ -385,7 +387,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         style: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w600,
-          color: titleColor ?? const Color(0xFF101928),
+          color: titleColor ?? Theme.of(context).colorScheme.onSurface,
         ),
       ),
       trailing: trailing,

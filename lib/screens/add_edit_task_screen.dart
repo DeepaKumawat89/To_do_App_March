@@ -74,9 +74,9 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.9,
       ),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF7F8FA),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(32),
           topRight: Radius.circular(32),
         ),
@@ -111,10 +111,10 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                   children: [
                     Text(
                       isEditing ? "Edit Task" : "Add New Task",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF101928),
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     GestureDetector(
@@ -168,7 +168,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Theme.of(context).cardColor,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 18,
@@ -215,7 +215,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Theme.of(context).cardColor,
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 18,
@@ -250,9 +250,13 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                         Container(
                           height: 52,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0xFFE4E7EC)),
+                            border: Border.all(
+                              color: Theme.of(
+                                context,
+                              ).dividerColor.withOpacity(0.05),
+                            ),
                           ),
                           child: Row(
                             children: [
@@ -341,10 +345,12 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                             height: 52,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: const Color(0xFFE4E7EC),
+                                color: Theme.of(
+                                  context,
+                                ).dividerColor.withOpacity(0.05),
                               ),
                             ),
                             child: Row(
@@ -352,10 +358,12 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               children: [
                                 Text(
                                   "${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: Color(0xFF101928),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                   ),
                                 ),
                                 const Icon(
@@ -382,9 +390,13 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                   horizontal: 24,
                   vertical: 20,
                 ),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF7F8FA),
-                  border: Border(top: BorderSide(color: Color(0xFFEAECF0))),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  border: Border(
+                    top: BorderSide(
+                      color: Theme.of(context).dividerColor.withOpacity(0.05),
+                    ),
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -394,8 +406,12 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(color: Color(0xFFE4E7EC)),
+                          backgroundColor: Theme.of(context).cardColor,
+                          side: BorderSide(
+                            color: Theme.of(
+                              context,
+                            ).dividerColor.withOpacity(0.05),
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

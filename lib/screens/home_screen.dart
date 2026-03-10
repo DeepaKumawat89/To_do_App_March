@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       extendBody: true,
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _currentIndex == 1
           ? ProfileScreen(
               onLogout: _logout,
@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           child: WaterDropNavBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).cardColor,
             waterDropColor: const Color(0xFF3D3CFA),
             inactiveIconColor: const Color(0xFF98A2B3),
             iconSize: 32,
@@ -229,12 +229,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Text(
+                  Text(
                     "Dashboard",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF101928),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -251,10 +251,10 @@ class _HomeScreenState extends State<HomeScreen> {
           // Greeting Text
           Text(
             "Hello, $displayName!",
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF101928),
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           const SizedBox(height: 8),
@@ -282,10 +282,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Text(
                 _showAllTasks ? "All Tasks" : "Today's Tasks",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF101928),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               GestureDetector(
@@ -416,9 +416,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFF2F4F7), width: 1.5),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withOpacity(0.05),
+            width: 1.5,
+          ),
           boxShadow: const [
             BoxShadow(
               color: Color(0x05000000),
@@ -482,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontWeight: FontWeight.w700,
                             color: task.isCompleted
                                 ? const Color(0xFF98A2B3)
-                                : const Color(0xFF101928),
+                                : Theme.of(context).colorScheme.onSurface,
                             decoration: task.isCompleted
                                 ? TextDecoration.lineThrough
                                 : null,
@@ -535,7 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     elevation: 4,
                     onSelected: (value) {
                       if (value == 'edit') {
