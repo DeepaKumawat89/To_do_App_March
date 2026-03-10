@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/task_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/task_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Unused imports removed
 
 class AddEditTaskScreen extends StatefulWidget {
@@ -76,9 +77,9 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32.r),
+          topRight: Radius.circular(32.r),
         ),
       ),
       child: SafeArea(
@@ -89,22 +90,22 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Drag Handle
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Container(
-                width: 48,
-                height: 4,
+                width: 48.w,
+                height: 4.h,
                 decoration: BoxDecoration(
                   color: const Color(0xFFD0D5DD),
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // Top Bar
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 16.h,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,30 +113,30 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                     Text(
                       isEditing ? "Edit Task" : "Add New Task",
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w800,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close_rounded,
                         color: Color(0xFF667085),
-                        size: 26,
+                        size: 26.sp,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Divider(color: Color(0xFFEAECF0), height: 1),
+              Divider(color: Color(0xFFEAECF0), height: 1.h),
 
               // Form Content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 24,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 24.w,
+                    vertical: 24.h,
                   ),
                   child: Form(
                     key: _formKey,
@@ -143,119 +144,119 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Title
-                        const Text(
+                        Text(
                           "Task Title",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF344054),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         TextFormField(
                           controller: _titleController,
                           validator: (v) =>
                               v!.isEmpty ? "Title is required" : null,
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF101928),
                           ),
                           decoration: InputDecoration(
                             hintText: "e.g., Design system audit",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                               color: Color(0xFF98A2B3),
                               fontWeight: FontWeight.w400,
                             ),
                             filled: true,
                             fillColor: Theme.of(context).cardColor,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 18,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20.w,
+                              vertical: 18.h,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
+                              borderRadius: BorderRadius.circular(16.r),
+                              borderSide: BorderSide(
                                 color: Color(0xFFE4E7EC),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
+                              borderRadius: BorderRadius.circular(16.r),
+                              borderSide: BorderSide(
                                 color: Color(0xFF3D3CFA),
-                                width: 1.5,
+                                width: 1.5.w,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
 
                         // Description
-                        const Text(
+                        Text(
                           "Description",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF344054),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         TextFormField(
                           controller: _descriptionController,
                           maxLines: 4,
-                          style: const TextStyle(
-                            fontSize: 16,
+                          style: TextStyle(
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF101928),
                           ),
                           decoration: InputDecoration(
                             hintText: "Add more details about this task...",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                               color: Color(0xFF98A2B3),
                               fontWeight: FontWeight.w400,
                             ),
                             filled: true,
                             fillColor: Theme.of(context).cardColor,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 18,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 20.w,
+                              vertical: 18.h,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
+                              borderRadius: BorderRadius.circular(16.r),
+                              borderSide: BorderSide(
                                 color: Color(0xFFE4E7EC),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(
+                              borderRadius: BorderRadius.circular(16.r),
+                              borderSide: BorderSide(
                                 color: Color(0xFF3D3CFA),
-                                width: 1.5,
+                                width: 1.5.w,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
 
                         // Priority Selection
-                        const Text(
+                        Text(
                           "Priority",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF344054),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Container(
-                          height: 52,
+                          height: 52.h,
                           decoration: BoxDecoration(
                             color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(
                               color: Theme.of(
                                 context,
-                              ).dividerColor.withOpacity(0.05),
+                              ).dividerColor.withAlpha(12),
                             ),
                           ),
                           child: Row(
@@ -271,7 +272,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                                 ),
                               ),
                               Container(
-                                width: 1,
+                                width: 1.w,
                                 color: const Color(0xFFE4E7EC),
                               ),
                               Expanded(
@@ -285,7 +286,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                                 ),
                               ),
                               Container(
-                                width: 1,
+                                width: 1.w,
                                 color: const Color(0xFFE4E7EC),
                               ),
                               Expanded(
@@ -302,18 +303,18 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
 
                         // Due Date
-                        const Text(
+                        Text(
                           "Due Date",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF344054),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         GestureDetector(
                           onTap: () async {
                             final pickedDate = await showDatePicker(
@@ -342,15 +343,15 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                             }
                           },
                           child: Container(
-                            height: 52,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            height: 52.h,
+                            padding: EdgeInsets.symmetric(horizontal: 20.w),
                             decoration: BoxDecoration(
                               color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                               border: Border.all(
                                 color: Theme.of(
                                   context,
-                                ).dividerColor.withOpacity(0.05),
+                                ).dividerColor.withAlpha(12),
                               ),
                             ),
                             child: Row(
@@ -359,24 +360,24 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                                 Text(
                                   "${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
                                     color: Theme.of(
                                       context,
                                     ).colorScheme.onSurface,
                                   ),
                                 ),
-                                const Icon(
+                                Icon(
                                   Icons.calendar_today_rounded,
                                   color: Color(0xFF667085),
-                                  size: 20,
+                                  size: 20.sp,
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 48,
+                        SizedBox(
+                          height: 48.h,
                         ), // Padding space instead of Spacer
                       ],
                     ),
@@ -386,15 +387,15 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
 
               // Bottom Actions Layer
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 20,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24.w,
+                  vertical: 20.h,
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border(
                     top: BorderSide(
-                      color: Theme.of(context).dividerColor.withOpacity(0.05),
+                      color: Theme.of(context).dividerColor.withAlpha(12),
                     ),
                   ),
                 ),
@@ -405,44 +406,44 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
                           backgroundColor: Theme.of(context).cardColor,
                           side: BorderSide(
                             color: Theme.of(
                               context,
-                            ).dividerColor.withOpacity(0.05),
+                            ).dividerColor.withAlpha(12),
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           "Cancel",
                           style: TextStyle(
                             color: Color(0xFF344054),
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Expanded(
                       flex: 2,
                       child: ElevatedButton(
                         onPressed: taskProvider.isLoading ? null : _saveTask,
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
                           backgroundColor: const Color(0xFF3D3CFA),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         child: taskProvider.isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
+                            ? SizedBox(
+                                height: 20.h,
+                                width: 20.w,
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
                                   strokeWidth: 2,
@@ -450,9 +451,9 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               )
                             : Text(
                                 isEditing ? "Update Task" : "Create Task",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -475,7 +476,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           color: isSelected ? const Color(0xFF3D3CFA) : const Color(0xFF667085),
         ),

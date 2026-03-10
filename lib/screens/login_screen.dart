@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/app_theme.dart';
 import '../widgets/custom_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,9 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
+            constraints: BoxConstraints(maxWidth: 500),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: EdgeInsets.symmetric(horizontal: 28.w),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -52,51 +53,51 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Illustration / Header area
                     Center(
                       child: Container(
-                        width: 90,
-                        height: 90,
+                        width: 90.w,
+                        height: 90.h,
                         decoration: BoxDecoration(
                           gradient: AppColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.3),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
+                              color: AppColors.primary.withAlpha(76),
+                              blurRadius: 20.r,
+                              offset: Offset(0.w, 8.h),
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.check_circle_rounded,
-                          size: 48,
+                          size: 48.sp,
                           color: Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
 
                     // Welcome text
-                    const Center(
+                    Center(
                       child: Text(
                         "Welcome Back!",
                         style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textDark,
                           letterSpacing: 0.3,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Center(
+                    SizedBox(height: 8.h),
+                    Center(
                       child: Text(
                         "Sign in to continue managing your tasks",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           color: AppColors.textLight,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40.h),
 
                     // Email field
                     CustomTextField(
@@ -105,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       icon: Icons.email_outlined,
                       validator: null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Password field
                     CustomTextField(
@@ -115,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       isPassword: true,
                       validator: null,
                     ),
-                    const SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     // Login button
                     CustomButton(
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           authProvider.status == AuthStatus.authenticating,
                       onPressed: _login,
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Divider
                     Row(
@@ -136,13 +137,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             thickness: 1,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Text(
                             "OR",
                             style: TextStyle(
                               color: AppColors.textLight,
-                              fontSize: 12,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ),
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Google Sign In button
                     GoogleSignInButton(
@@ -166,37 +167,38 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                         final success = await authProvider.loginWithGoogle();
                         if (success && mounted) {
+if (!context.mounted) return;
                           Navigator.pushReplacementNamed(context, '/home');
                         }
                       },
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Sign up link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Don't have an account? ",
                           style: TextStyle(
                             color: AppColors.textMedium,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pushNamed(context, '/signup'),
-                          child: const Text(
+                          child: Text(
                             "Sign Up",
                             style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w700,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),

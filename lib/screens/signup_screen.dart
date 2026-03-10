@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/app_theme.dart';
 import '../widgets/custom_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -51,29 +52,29 @@ class _SignupScreenState extends State<SignupScreen> {
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
+            constraints: BoxConstraints(maxWidth: 500),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
+              padding: EdgeInsets.symmetric(horizontal: 28.w),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     // Back button
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Container(
-                        width: 42,
-                        height: 42,
+                        width: 42.w,
+                        height: 42.h,
                         decoration: BoxDecoration(
                           color: AppColors.surfaceLight,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.arrow_back_rounded,
                           color: AppColors.textDark,
-                          size: 20,
+                          size: 20.sp,
                         ),
                       ),
                     ),
@@ -82,51 +83,51 @@ class _SignupScreenState extends State<SignupScreen> {
                     // Illustration / Header area
                     Center(
                       child: Container(
-                        width: 90,
-                        height: 90,
+                        width: 90.w,
+                        height: 90.h,
                         decoration: BoxDecoration(
                           gradient: AppColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.3),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
+                              color: AppColors.primary.withAlpha(76),
+                              blurRadius: 20.r,
+                              offset: Offset(0.w, 8.h),
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.person_add_rounded,
-                          size: 48,
+                          size: 48.sp,
                           color: Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Header
-                    const Center(
+                    Center(
                       child: Text(
                         "Create Account",
                         style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.w800,
                           color: AppColors.textDark,
                           letterSpacing: 0.3,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Center(
+                    SizedBox(height: 8.h),
+                    Center(
                       child: Text(
                         "Join us and start organizing your life",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           color: AppColors.textLight,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Email
                     CustomTextField(
@@ -135,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       icon: Icons.email_outlined,
                       validator: null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Password
                     CustomTextField(
@@ -145,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       isPassword: true,
                       validator: null,
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
 
                     // Confirm password
                     CustomTextField(
@@ -155,7 +156,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       isPassword: true,
                       validator: null,
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Signup button
                     CustomButton(
@@ -165,7 +166,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           authProvider.status == AuthStatus.authenticating,
                       onPressed: _signup,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Divider
                     Row(
@@ -176,13 +177,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             thickness: 1,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Text(
                             "OR",
                             style: TextStyle(
                               color: AppColors.textLight,
-                              fontSize: 12,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ),
@@ -194,7 +195,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     // Google Sign In button
                     GoogleSignInButton(
@@ -206,37 +207,38 @@ class _SignupScreenState extends State<SignupScreen> {
                         );
                         final success = await authProv.loginWithGoogle();
                         if (success && mounted) {
+if (!context.mounted) return;
                           Navigator.pushReplacementNamed(context, '/home');
                         }
                       },
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Login link
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "Already have an account? ",
                           style: TextStyle(
                             color: AppColors.textMedium,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                           ),
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pop(context),
-                          child: const Text(
+                          child: Text(
                             "Sign In",
                             style: TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w700,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),

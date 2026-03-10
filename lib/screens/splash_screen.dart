@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../utils/app_theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Check our new shared preference session directly!
     final hasSession = await auth.checkSession();
 
+    if (!mounted) return;
     if (hasSession || auth.isAuthenticated) {
       Navigator.pushReplacementNamed(context, '/home');
     } else {
@@ -54,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.splashGradient),
+        decoration: BoxDecoration(gradient: AppColors.splashGradient),
         child: FadeTransition(
           opacity: _fadeIn,
           child: Column(
@@ -62,8 +64,8 @@ class _SplashScreenState extends State<SplashScreen>
             children: [
               // Lottie animation from local asset
               SizedBox(
-                width: 220,
-                height: 220,
+                width: 220.w,
+                height: 220.h,
                 child: Lottie.asset(
                   'assets/animations/completing_tasks.json',
                   fit: BoxFit.contain,
@@ -71,33 +73,33 @@ class _SplashScreenState extends State<SplashScreen>
                   animate: true,
                 ),
               ),
-              const SizedBox(height: 28),
-              const Text(
+              SizedBox(height: 28.h),
+              Text(
                 "TaskFlow",
                 style: TextStyle(
-                  fontSize: 36,
+                  fontSize: 36.sp,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                   letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 "Organize your day beautifully",
                 style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 15.sp,
+                  color: Colors.white.withAlpha(204),
                   letterSpacing: 0.5,
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: 50.h),
               SizedBox(
-                width: 28,
-                height: 28,
+                width: 28.w,
+                height: 28.h,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.white.withOpacity(0.7),
+                    Colors.white.withAlpha(178),
                   ),
                 ),
               ),

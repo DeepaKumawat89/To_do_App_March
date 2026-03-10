@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Custom text field with soft styling
 class CustomTextField extends StatefulWidget {
@@ -34,14 +35,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.isPassword && _obscure,
       maxLines: widget.isPassword ? 1 : widget.maxLines,
       validator: widget.validator,
-      style: const TextStyle(
+      style: TextStyle(
         color: AppColors.textDark,
-        fontSize: 15,
+        fontSize: 15.sp,
         fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         labelText: widget.label,
-        prefixIcon: Icon(widget.icon, color: AppColors.primary, size: 20),
+        prefixIcon: Icon(widget.icon, color: AppColors.primary, size: 20.sp),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
@@ -49,7 +50,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       ? Icons.visibility_off_rounded
                       : Icons.visibility_rounded,
                   color: AppColors.textLight,
-                  size: 20,
+                  size: 20.sp,
                 ),
                 onPressed: () => setState(() => _obscure = !_obscure),
               )
@@ -76,16 +77,16 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: 56.h,
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: AppColors.primaryGradient,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.30),
-              blurRadius: 12,
-              offset: const Offset(0, 5),
+              color: AppColors.primary.withAlpha(76),
+              blurRadius: 12.r,
+              offset: Offset(0.w, 5.h),
             ),
           ],
         ),
@@ -95,13 +96,13 @@ class CustomButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
             ),
           ),
           child: isLoading
-              ? const SizedBox(
-                  width: 24,
-                  height: 24,
+              ? SizedBox(
+                  width: 24.w,
+                  height: 24.h,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -109,8 +110,8 @@ class CustomButton extends StatelessWidget {
                 )
               : Text(
                   text,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,
                     color: Colors.white,
@@ -137,19 +138,19 @@ class SecondaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: 56.h,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: AppColors.primary, width: 1.5),
+          side: BorderSide(color: AppColors.primary, width: 1.5.w),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
           ),
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
             color: AppColors.primary,
           ),
@@ -174,26 +175,26 @@ class GoogleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: 56.h,
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
           side: BorderSide(
-            color: AppColors.divider.withOpacity(0.5),
-            width: 1.5,
+            color: AppColors.divider.withAlpha(127),
+            width: 1.5.w,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30.r),
           ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (isLoading)
-              const SizedBox(
-                width: 22,
-                height: 22,
+              SizedBox(
+                width: 22.w,
+                height: 22.h,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
@@ -202,13 +203,13 @@ class GoogleSignInButton extends StatelessWidget {
             else
               Image.network(
                 'https://img.icons8.com/color/48/000000/google-logo.png',
-                height: 24,
+                height: 24.h,
               ),
-            const SizedBox(width: 12),
-            const Text(
+            SizedBox(width: 12.w),
+            Text(
               "Continue with Google",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textDark,
                 letterSpacing: -0.2,

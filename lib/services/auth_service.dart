@@ -63,7 +63,7 @@ class AuthService {
 
       // Obtain the authentication details
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+          googleUser.authentication;
 
       // Create a Firebase credential using only the ID token
       // (Google Sign In v7 separates authentication from authorization,

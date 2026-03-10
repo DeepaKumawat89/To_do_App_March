@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
@@ -8,6 +7,7 @@ import '../models/task_model.dart';
 import '../utils/app_theme.dart';
 import 'add_edit_task_screen.dart';
 import 'profile_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : SafeArea(
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 600),
+                  constraints: BoxConstraints(maxWidth: 600),
                   child: Column(
                     children: [
                       // Header section
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child:
                             taskProvider.isLoading && taskProvider.tasks.isEmpty
-                            ? const Center(
+                            ? Center(
                                 child: CircularProgressIndicator(
                                   color: AppColors.primary,
                                 ),
@@ -112,9 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: displayedTasks.isEmpty
                                     ? _buildEmptyState()
                                     : ListView.builder(
-                                        padding: const EdgeInsets.only(
-                                          top: 8,
-                                          bottom: 100,
+                                        padding: EdgeInsets.only(
+                                          top: 8.h,
+                                          bottom: 100.h,
                                         ),
                                         itemCount: displayedTasks.length,
                                         itemBuilder: (context, index) {
@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: _currentIndex == 1
           ? null
           : Container(
-              margin: const EdgeInsets.only(bottom: 20),
+              margin: EdgeInsets.only(bottom: 20.h),
               child: FloatingActionButton(
                 onPressed: () {
                   showModalBottomSheet(
@@ -153,9 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 highlightElevation: 0,
                 backgroundColor: const Color(0xFF3D3CFA),
                 shape: const CircleBorder(),
-                child: const Icon(
+                child: Icon(
                   Icons.add_rounded,
-                  size: 32,
+                  size: 32.sp,
                   color: Colors.white,
                 ),
               ),
@@ -164,14 +164,14 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF3D3CFA).withOpacity(0.08),
-              blurRadius: 20,
+              color: const Color(0xFF3D3CFA).withAlpha(20),
+              blurRadius: 20.r,
               offset: const Offset(0, -5),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
           child: WaterDropNavBar(
             backgroundColor: Theme.of(context).cardColor,
             waterDropColor: const Color(0xFF3D3CFA),
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final displayName = "${name[0].toUpperCase()}${name.substring(1)}";
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 24.0.w, vertical: 16.0.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -217,55 +217,55 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   Container(
-                    width: 44,
-                    height: 44,
+                    width: 44.w,
+                    height: 44.h,
                     decoration: BoxDecoration(
                       color: const Color(0xFFE6E5FF),
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(22.r),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.dashboard_rounded,
                       color: Color(0xFF3D3CFA),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
                   Text(
                     "Dashboard",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w800,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
               ),
-              const Icon(
+              Icon(
                 Icons.notifications_none_rounded,
                 color: Color(0xFF475467),
-                size: 28,
+                size: 28.sp,
               ),
             ],
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32.h),
 
           // Greeting Text
           Text(
             "Hello, $displayName!",
             style: TextStyle(
-              fontSize: 32,
+              fontSize: 32.sp,
               fontWeight: FontWeight.w800,
               color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           RichText(
             text: TextSpan(
-              style: const TextStyle(fontSize: 16, color: Color(0xFF667085)),
+              style: TextStyle(fontSize: 16.sp, color: Color(0xFF667085)),
               children: [
                 const TextSpan(text: "You have "),
                 TextSpan(
                   text: "$pending tasks",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF3D3CFA),
                   ),
@@ -274,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40.h),
 
           // Today's Tasks Row
           Row(
@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 _showAllTasks ? "All Tasks" : "Today's Tasks",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w800,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
@@ -296,8 +296,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Text(
                   _showAllTasks ? "View Today" : "View all",
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: TextStyle(
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF3D3CFA),
                   ),
@@ -319,35 +319,35 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Container(
-                width: 100,
-                height: 100,
+                width: 100.w,
+                height: 100.h,
                 decoration: BoxDecoration(
                   color: AppColors.primarySoft,
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(28.r),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.task_alt_rounded,
-                  size: 50,
+                  size: 50.sp,
                   color: AppColors.primaryLight,
                 ),
               ),
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24.h),
+              Text(
                 "No tasks yet!",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textDark,
                 ),
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8.h),
+              Text(
                 "Tap the + button to create\nyour first task",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: AppColors.textLight,
-                  height: 1.5,
+                  height: 1.5.h,
                 ),
               ),
             ],
@@ -383,17 +383,17 @@ class _HomeScreenState extends State<HomeScreen> {
       key: Key(task.id!),
       direction: DismissDirection.endToStart,
       background: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: const Color(0xFF667085), // Slate grey instead of red
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 24),
-        child: const Icon(
+        padding: EdgeInsets.only(right: 24.w),
+        child: Icon(
           Icons.delete_outline_rounded,
           color: Colors.white,
-          size: 26,
+          size: 26.sp,
         ),
       ),
       onDismissed: (direction) {
@@ -401,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text("Task deleted"),
+              content: Text("Task deleted"),
               action: SnackBarAction(
                 label: "UNDO",
                 textColor: Colors.white,
@@ -414,28 +414,28 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.05),
-            width: 1.5,
+            color: Theme.of(context).dividerColor.withAlpha(12),
+            width: 1.5.w,
           ),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
               color: Color(0x05000000),
-              blurRadius: 10,
-              offset: Offset(0, 4),
+              blurRadius: 10.r,
+              offset: Offset(0.w, 4.h),
             ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               child: Row(
                 children: [
                   // Checkbox
@@ -448,8 +448,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      width: 24,
-                      height: 24,
+                      width: 24.w,
+                      height: 24.h,
                       decoration: BoxDecoration(
                         color: task.isCompleted
                             ? const Color(0xFF6F6FFF)
@@ -458,20 +458,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? null
                             : Border.all(
                                 color: const Color(0xFFD0D5DD),
-                                width: 1.5,
+                                width: 1.5.w,
                               ),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.r),
                       ),
                       child: task.isCompleted
-                          ? const Icon(
+                          ? Icon(
                               Icons.check_rounded,
-                              size: 16,
+                              size: 16.sp,
                               color: Colors.white,
                             )
                           : null,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16.w),
 
                   // Task details
                   Expanded(
@@ -481,7 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           task.title,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w700,
                             color: task.isCompleted
                                 ? const Color(0xFF98A2B3)
@@ -492,32 +492,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             decorationColor: const Color(0xFF98A2B3),
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 4.h,
                               ),
                               decoration: BoxDecoration(
                                 color: pillBg,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Text(
                                 pillLabel,
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 10.sp,
                                   fontWeight: FontWeight.w800,
                                   color: pillText,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Text(
                               "${task.dueDate.day.toString().padLeft(2, '0')}/${task.dueDate.month.toString().padLeft(2, '0')}/${task.dueDate.year}",
-                              style: const TextStyle(
-                                fontSize: 12,
+                              style: TextStyle(
+                                fontSize: 12.sp,
                                 color: Color(0xFF98A2B3),
                                 fontWeight: FontWeight.w500,
                               ),
@@ -530,13 +530,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   // Options Menu
                   PopupMenuButton<String>(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.more_vert_rounded,
                       color: Color(0xFF98A2B3),
-                      size: 24,
+                      size: 24.sp,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     color: Theme.of(context).cardColor,
                     elevation: 4,
@@ -555,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text("Task deleted"),
+                            content: Text("Task deleted"),
                             action: SnackBarAction(
                               label: "UNDO",
                               textColor: Colors.white,
@@ -571,20 +571,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'edit',
                         child: Row(
                           children: [
                             Icon(
                               Icons.edit_outlined,
-                              size: 20,
+                              size: 20.sp,
                               color: Color(0xFF344054),
                             ),
-                            SizedBox(width: 12),
+                            SizedBox(width: 12.w),
                             Text(
                               "Edit",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF344054),
                               ),
@@ -592,20 +592,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'delete',
                         child: Row(
                           children: [
                             Icon(
                               Icons.delete_outline_rounded,
-                              size: 20,
+                              size: 20.sp,
                               color: Colors.redAccent,
                             ),
-                            SizedBox(width: 12),
+                            SizedBox(width: 12.w),
                             Text(
                               "Delete",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.redAccent,
                               ),

@@ -11,6 +11,7 @@ import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
 import 'utils/app_theme.dart';
 import 'providers/theme_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,17 +88,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
-        return MaterialApp(
-          title: 'TaskFlow',
-          debugShowCheckedModeBanner: false,
-          themeMode: themeProvider.themeMode,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          home: const SplashScreen(),
-          routes: {
-            '/login': (context) => const LoginScreen(),
-            '/signup': (context) => const SignupScreen(),
-            '/home': (context) => const HomeScreen(),
+        return ScreenUtilInit(
+          designSize: const Size(375, 812),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp(
+              title: 'TaskFlow',
+              debugShowCheckedModeBanner: false,
+              themeMode: themeProvider.themeMode,
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              home: const SplashScreen(),
+              routes: {
+                '/login': (context) => const LoginScreen(),
+                '/signup': (context) => const SignupScreen(),
+                '/home': (context) => const HomeScreen(),
+              },
+            );
           },
         );
       },

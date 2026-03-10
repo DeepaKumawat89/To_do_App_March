@@ -1,93 +1,109 @@
-# Flutter To-Do App (Cloud Firestore)
+# 🚀 TaskFlow &mdash; Organize Your Day Beautifully
 
-A complete Flutter mobile application to manage your daily tasks, powered by **Cloud Firestore** and **Firebase Authentication**.
+<div align="center">
+  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+  <img src="https://img.shields.io/badge/Material_3-7D5260?style=for-the-badge&logo=materialdesign&logoColor=white" />
+</div>
 
-## 🚀 Features
+---
 
-- **Authentication**: Secure Login and Signup using Firebase Auth.
-- **Task Management**: Create, Read, Update, and Delete tasks.
-- **Real-time Synchronization**: Powered by Cloud Firestore SDK.
-- **Modern State Management**: Managed using the `Provider` package.
-- **Premium UI**: Clean, modern Material 3 design with smooth interactions.
-- **Persistence**: Maintains user session and auth state.
+**TaskFlow** is a premium, high-performance To-Do application built with **Flutter** and **Firebase**. It features a stunning modern UI, seamless real-time synchronization, and a smooth user experience designed to make productivity effortless and enjoyable.
 
-## 🛠️ Tech Stack
+## 🌟 Key Features
 
-- **Framework**: [Flutter](https://flutter.dev)
+### 🔐 Secure Authentication
+- **Multi-method Login**: Sign in securely with Email/Password or **Google One-Tap**.
+- **Persistent Sessions**: Stay logged in across restarts with `shared_preferences`.
+- **Password Recovery**: Effortless password reset functionality.
+
+### 📝 Task Management
+- **Real-time Sync**: Tasks are instantly updated across devices using **Cloud Firestore**.
+- **CRUD Operations**: Create, read, update, and delete tasks with ease.
+- **Intuitive UI**: Beautifully designed screens for adding and editing tasks.
+
+### 🎨 Premium UI/UX
+- **Dynamic Theming**: Support for **Light and Dark Modes** to suit your preference.
+- **Responsive Design**: Built using `flutter_screenutil` for a perfect look on any screen size.
+- **Interactive Navigation**: Featuring the sleek `water_drop_nav_bar`.
+- **Delightful Animations**: Lottie animations on the Splash Screen and throughout the app.
+
+---
+
+## 🛠️ Built With
+
+- **Framework**: [Flutter](https://flutter.dev) (v3.x)
 - **State Management**: [Provider](https://pub.dev/packages/provider)
-- **Database**: [Cloud Firestore](https://firebase.google.com/docs/firestore)
-- **Auth**: [Firebase Authentication](https://firebase.google.com/docs/auth)
+- **Backend/Database**: [Cloud Firestore](https://firebase.google.com/docs/firestore)
+- **Auth**: [Firebase Authentication](https://firebase.google.com/docs/auth) & [Google Sign-In](https://pub.dev/packages/google_sign_in)
+- **Storage**: [Shared Preferences](https://pub.dev/packages/shared_preferences)
+- **UI Components**: 
+  - `water_drop_nav_bar` (Interactive Nav)
+  - `lottie` (Vector Animations)
+  - `flutter_screenutil` (Responsiveness)
+  - `logger` (Clean Debugging)
 
 ---
 
-## 🔧 Firebase Setup Instructions
+## 🚀 Getting Started
 
-Follow these steps to connect your project to Firebase:
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) installed.
+- [Firebase account](https://console.firebase.google.com/) and a project created.
 
-### 1. Create a Firebase Project
-- Go to [Firebase Console](https://console.firebase.google.com/).
-- Click **Add Project** and follow the steps.
+### Installation
 
-### 2. Enable Authentication
-- In the Firebase Console, go to **Authentication** > **Get Started**.
-- Enable **Email/Password** sign-in provider.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/taskflow.git
+   cd taskflow
+   ```
 
-### 3. Setup Cloud Firestore
-- Go to **Firestore Database** > **Create database**.
-- Select a location and start in **Test Mode**.
-- **Rule Configuration** (Recommended for security):
-  ```
-  rules_version = '2';
-  service cloud.firestore {
-    match /databases/{database}/documents {
-      match /users/{userId}/tasks/{taskId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-    }
-  }
-  ```
+2. **Install dependencies**:
+   ```bash
+   flutter pub get
+   ```
 
-### 4. Configure App
-- Use the [FlutterFire CLI](https://firebase.flutter.dev/docs/cli) to configure your app:
-  ```bash
-  dart pub global activate flutterfire_cli
-  flutterfire configure
-  ```
-- This will generate `firebase_options.dart` and register your apps automatically.
+3. **Configure Firebase**:
+   - Install the FlutterFire CLI: `dart pub global activate flutterfire_cli`
+   - Run `flutterfire configure` and select your project.
+   - This will generate `lib/firebase_options.dart`.
 
----
+4. **Run the app**:
+   ```bash
+   flutter run
+   ```
 
-## 📦 How to Build the APK
-
-To generate a production-ready APK, run the following command in your terminal:
-
+### 📦 Build Release APK
+To generate a production-ready APK:
 ```bash
 flutter build apk --release
 ```
-
-The APK will be located at:
-`build/app/outputs/flutter-apk/app-release.apk`
+The APK will be located at: `build/app/outputs/flutter-apk/app-release.apk`
 
 ---
 
-## 📂 Project Structure
+## 📂 Project Architecture
 
-```
+```bash
 lib/
-├── models/       # Data models (Task)
-├── providers/    # App state management (Auth, Tasks)
-├── screens/      # UI Screens (Login, Home, etc.)
-├── services/     # App services (Auth, Firestore)
-├── utils/        # Constants and helpers
-└── widgets/      # Reusable UI components
+├── models/       # Data blueprints (TaskModel)
+├── providers/    # App states (Auth, Task, Theme)
+├── screens/      # Feature-specific UI screens
+├── services/     # API/Firebase logic (AuthService, TaskService)
+├── utils/        # Constants, Themes, and Extensions
+└── widgets/      # Reusable atomic UI components
 ```
 
 ---
 
-## 🤝 Contributing
+## 📄 License
 
-Feel free to fork this project and submit PRs for any improvements!
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for more details.
 
-## 📝 License
+---
 
-This project is open-source and available under the MIT License.
+<div align="center">
+  Made with ❤️ by Deepak Kumawat
+</div>
